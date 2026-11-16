@@ -1,8 +1,8 @@
-# 💻 Chromebook Manager
+# SEICE Manager
 
 Sistema web para gerenciamento de equipamentos de TI, manutenção e gastos em ambiente escolar.
 
-O **Chromebook Manager** centraliza o cadastro do patrimônio, o acompanhamento de manutenções e reparos e a consulta dos custos. O sistema atende as unidades Campos Elíseos (CE) e Jardim Primavera (JP), com acesso controlado por usuário e unidade.
+O **SEICE Manager** centraliza o cadastro do patrimônio, o acompanhamento de manutenções e reparos e a consulta dos custos. O sistema atende as unidades Campos Elíseos (CE) e Jardim Primavera (JP), com acesso controlado por usuário e unidade.
 
 ## ✨ Módulos e funcionalidades
 
@@ -47,7 +47,7 @@ O **Chromebook Manager** centraliza o cadastro do patrimônio, o acompanhamento 
 | [MySQL](https://www.mysql.com/) / [TiDB Cloud](https://tidbcloud.com/) | Banco de dados |
 | [mysql2](https://github.com/sidorares/node-mysql2) | Conexão com o banco |
 | [pnpm](https://pnpm.io/) | Gerenciamento de dependências |
-| [GitHub](https://github.com/yagodiax/chromebook-manager) | Versionamento do código |
+| [GitHub](https://github.com/Orizon-Solucoes/seice-manager) | Versionamento do código |
 | [Vercel](https://vercel.com/) | Hospedagem e implantação |
 
 ## 🚀 Como executar localmente no Windows
@@ -78,8 +78,8 @@ corepack prepare pnpm@10.34.6 --activate
 ### 1. Baixar o projeto
 
 ```powershell
-git clone https://github.com/yagodiax/chromebook-manager.git
-cd chromebook-manager
+git clone https://github.com/yagodiax/seice-manager.git
+cd seice-manager
 ```
 
 Se a pasta já existir, entre nela em vez de clonar novamente:
@@ -193,7 +193,7 @@ chromebook-manager/
 
 ## 🌐 Links do projeto
 
-- **Repositório:** [github.com/yagodiax/chromebook-manager](https://github.com/yagodiax/chromebook-manager)
+- **Repositório:** [github.com/Orizon-Solucoes/seice-manager](https://github.com/Orizon-Solucoes/seice-manager)
 - **Aplicação:** [Abrir o Chromebook Manager](https://chromebook-manager-khaki.vercel.app/)
 
 ## 🎯 Objetivo
@@ -202,4 +202,4 @@ Ajudar a equipe de TI escolar a organizar o patrimônio tecnológico, acompanhar
 
 ---
 
-**Chromebook Manager** 💻 — projeto em evolução.
+**SEICE Manager** — projeto em evolução.
