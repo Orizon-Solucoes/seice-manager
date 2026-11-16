@@ -1430,3 +1430,22 @@ main tbody tr[class*="hover:bg-teal-"]:hover {
   background-color: var(--surface-muted) !important;
 }
 
+/* MODO CLARO · reduzir o branco puro e melhorar a separação das superfícies.
+   Mantém o tema escuro e os estados semânticos sem alterações. */
+:root {
+  color-scheme: light;
+  --background: #eeeeeb;
+  --foreground: #252525;
+  --surface: #f8f8f6;
+  --surface-raised: #fcfcfa;
+  --surface-muted: #e7e7e3;
+  --border: #d5d5cf;
+  --border-strong: #bdbdb5;
+  --muted: #62635d;
+  --sidebar: #f1f1ee;
+  --sidebar-foreground: #292929;
+  --brand-soft: #f5edcf;
+  --info-soft: #e8e8e5;
+  --shadow-card: 0 1px 3px rgb(0 0 0 / .045), 0 4px 12px rgb(0 0 0 / .025);
+}
+
