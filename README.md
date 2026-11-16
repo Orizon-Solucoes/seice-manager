@@ -85,7 +85,7 @@ cd seice-manager
 Se a pasta já existir, entre nela em vez de clonar novamente:
 
 ```powershell
-cd caminho\para\chromebook-manager
+cd caminho\para\seice-manager
 git pull
 ```
 
