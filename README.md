@@ -178,7 +178,7 @@ As tarefas acima representam melhorias planejadas e não devem ser interpretadas
 ## 📁 Estrutura geral
 
 ```text
-chromebook-manager/
+seice-manager/
 ├── database/       # Scripts estruturais e migrações
 ├── src/
 │   ├── app/        # Páginas, rotas e APIs
@@ -194,7 +194,7 @@ chromebook-manager/
 ## 🌐 Links do projeto
 
 - **Repositório:** [github.com/Orizon-Solucoes/seice-manager](https://github.com/Orizon-Solucoes/seice-manager)
-- **Aplicação:** [Abrir o Chromebook Manager](https://chromebook-manager-khaki.vercel.app/)
+- **Aplicação:** [Abrir o SEICE Manager](https://chromebook-manager-khaki.vercel.app/)
 
 ## 🎯 Objetivo
 
