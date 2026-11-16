@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -50,12 +51,8 @@ export default function LoginPage() {
     <main className="seice-login-v2 relative flex min-h-screen items-center justify-center bg-[#f4f4f1] px-4 py-12 text-[#252620] dark:bg-[#191a17] dark:text-[#f1f2ed]">
       <section className="w-full max-w-[430px] overflow-hidden rounded-2xl border border-[#e2e2dc] bg-white shadow-[0_18px_55px_rgba(25,26,22,0.09)] dark:border-[#3b3d36] dark:bg-[#242620]">
         <header className="border-b border-[#e8e8e2] px-8 pb-7 pt-8 dark:border-[#3b3d36]">
-          <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-900 text-sm font-extrabold tracking-tight text-white dark:bg-[#e7e8e1] dark:text-[#252620]">SE</div>
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[.14em] text-[#77786f] dark:text-[#a9aea4]">Colégio SEICE</p>
-              <p className="mt-0.5 text-sm font-semibold text-[#34352f] dark:text-[#e5e6df]">Tecnologia e infraestrutura</p>
-            </div>
+          <div className="mb-6 flex justify-center">
+            <Image src="/logoseice.jpeg" alt="Colégio SEICE" width={320} height={180} priority className="h-auto w-[172px] rounded-lg object-contain" />
           </div>
           <h1 className="text-[27px] font-bold tracking-[-.04em] text-[#252620] dark:text-white">SEICE Manager</h1>
           <p className="mt-2 text-sm leading-6 text-[#70716b] dark:text-[#a9aea4]">Acesse o ambiente de gestão de tecnologia.</p>
