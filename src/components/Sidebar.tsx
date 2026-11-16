@@ -79,7 +79,7 @@ export default function Sidebar({ mobileOpen, onClose }: { mobileOpen: boolean; 
     <aside id="navegacao-principal" aria-label="Menu principal" className={"fixed inset-y-0 left-0 z-50 flex h-dvh w-64 flex-col border-r transition-transform duration-200 md:translate-x-0 " + (mobileOpen ? "translate-x-0" : "-translate-x-full")}>
       <div className="border-b border-white/10 px-5 py-6">
         <div className="flex items-center gap-3">
-          <Image src="/logoseice.jpeg" alt="Colégio SEICE" width={160} height={90} priority className="h-auto w-[104px] shrink-0 rounded-md object-contain" />
+          <Image src="/logoseice.PNG" alt="Colégio SEICE" width={160} height={90} priority className="h-auto w-[72px] shrink-0 object-contain" />
           <div className="min-w-0">
             <h1 className="truncate text-[16px] font-extrabold tracking-tight text-white">SEICE Manager</h1>
             <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[.16em] text-white/55">Gestão de tecnologia</p>

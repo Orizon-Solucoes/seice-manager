@@ -52,7 +52,7 @@ export default function LoginPage() {
       <section className="w-full max-w-[430px] overflow-hidden rounded-2xl border border-[#e2e2dc] bg-white shadow-[0_18px_55px_rgba(25,26,22,0.09)] dark:border-[#3b3d36] dark:bg-[#242620]">
         <header className="border-b border-[#e8e8e2] px-8 pb-7 pt-8 dark:border-[#3b3d36]">
           <div className="mb-6 flex justify-center">
-            <Image src="/logoseice.jpeg" alt="Colégio SEICE" width={320} height={180} priority className="h-auto w-[172px] rounded-lg object-contain" />
+            <Image src="/logoseice.PNG" alt="Colégio SEICE" width={320} height={180} priority className="h-auto w-[172px] rounded-lg object-contain" />
           </div>
           <h1 className="text-[27px] font-bold tracking-[-.04em] text-[#252620] dark:text-white">SEICE Manager</h1>
           <p className="mt-2 text-sm leading-6 text-[#70716b] dark:text-[#a9aea4]">Acesse o ambiente de gestão de tecnologia.</p>
