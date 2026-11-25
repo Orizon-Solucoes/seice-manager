@@ -23,6 +23,7 @@ const STATUS = [
   "disponivel",
   "em-uso",
   "em-reparo",
+  "reserva",
   "inativo",
   "para-descarte",
 ] as const;
