@@ -345,6 +345,7 @@ export default function CadastroPage() {
                   <option value="disponivel">Disponível</option>
                   <option value="em-uso">Em uso</option>
                   <option value="em-reparo">Em reparo</option>
+                  <option value="reserva">Reserva</option>
                   <option value="inativo">Inativo</option>
                   <option value="para-descarte">Para descarte</option>
                 </select>
