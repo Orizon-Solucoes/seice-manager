@@ -127,6 +127,7 @@ export default function EquipamentosLista({
   const [equipamentos, setEquipamentos] = useState<Equipamento[]>([]);
   const [busca, setBusca] = useState("");
   const [statusFiltro, setStatusFiltro] = useState("todos");
+  const [ordemChromebooks, setOrdemChromebooks] = useState("id-asc");
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
 
@@ -224,25 +225,30 @@ export default function EquipamentosLista({
       "access-point",
     ];
 
-    const numeroChromebook = (item: Equipamento) => {
-      const numero = String(
-        item.detalhes?.numeroChromebook ??
-          item.patrimonio.replace("CHROME-", ""),
-      );
+    const numeroIdChromebook = (item: Equipamento) => {
+      const correspondencia = /(?:CHROME|CHROMEBOOK)[-_ ]?(\d+)/i.exec(item.patrimonio || "");
+      const valor = Number.parseInt(correspondencia?.[1] ?? "", 10);
+      return Number.isFinite(valor) ? valor : Number.MAX_SAFE_INTEGER;
+    };
 
-      const valor = Number.parseInt(numero, 10);
-
+    const numeroFisicoChromebook = (item: Equipamento) => {
+      const valor = Number.parseInt(String(item.detalhes?.numeroChromebook ?? ""), 10);
       return Number.isFinite(valor) ? valor : Number.MAX_SAFE_INTEGER;
     };
 
     return filtrados.sort((a, b) => {
       if (a.tipo === "chromebook" && b.tipo === "chromebook") {
-        return numeroChromebook(a) - numeroChromebook(b);
+        const comparacaoId = numeroIdChromebook(a) - numeroIdChromebook(b);
+        const comparacaoNumero = numeroFisicoChromebook(a) - numeroFisicoChromebook(b);
+        if (ordemChromebooks === "id-desc") return -comparacaoId;
+        if (ordemChromebooks === "numero-asc") return comparacaoNumero;
+        if (ordemChromebooks === "numero-desc") return -comparacaoNumero;
+        return comparacaoId;
       }
 
       return ordemTipos.indexOf(a.tipo) - ordemTipos.indexOf(b.tipo);
     });
-  }, [equipamentos, tipoFiltro, busca, statusFiltro]);
+  }, [equipamentos, tipoFiltro, busca, statusFiltro, ordemChromebooks]);
 
   async function excluirEquipamento(item: Equipamento) {
     const identificacao =
@@ -363,7 +369,7 @@ export default function EquipamentosLista({
           ))}
         </section>
 
-        <div className="mb-4 grid gap-3 rounded-2xl border border-teal-100 bg-white p-4 shadow-sm sm:grid-cols-[1fr_200px] dark:border-[#2b454c] dark:bg-[#1c2a33]">
+        <div className={`mb-4 grid gap-3 rounded-2xl border border-teal-100 bg-white p-4 shadow-sm ${tipoFiltro === "chromebook" ? "sm:grid-cols-[1fr_200px_220px]" : "sm:grid-cols-[1fr_200px]"} dark:border-[#2b454c] dark:bg-[#1c2a33]`}>
           <input
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
@@ -383,6 +389,20 @@ export default function EquipamentosLista({
               </option>
             ))}
           </select>
+
+          {tipoFiltro === "chromebook" && (
+            <select
+              value={ordemChromebooks}
+              onChange={(e) => setOrdemChromebooks(e.target.value)}
+              aria-label="Ordenar Chromebooks"
+              className={campo}
+            >
+              <option value="id-asc">ID: menor para maior</option>
+              <option value="id-desc">ID: maior para menor</option>
+              <option value="numero-asc">Número físico: menor para maior</option>
+              <option value="numero-desc">Número físico: maior para menor</option>
+            </select>
+          )}
         </div>
 
         {erro && (
@@ -425,14 +445,16 @@ export default function EquipamentosLista({
                         {item.tipo === "access-point"
                           ? `Access Point${item.detalhes?.bloco ? ` — ${String(item.detalhes.bloco)}` : ""}`
                           : item.tipo === "chromebook"
-                          ? `Chromebook nº ${String(
-                              item.detalhes?.numeroChromebook ??
-                                item.patrimonio.replace("CHROME-", ""),
-                            )}`
+                          ? (item.patrimonio || item.id).replace(/^CHROME-/i, "Chrome-")
                           : mostrarNumeroNoNome(item.tipo)
                             ? `${NOMES[item.tipo]} - ${numeroEquipamento(item)}`
                             : item.patrimonio || item.id}
                       </h2>
+                      {item.tipo === "chromebook" && (
+                        <p className="mt-1 text-sm font-medium text-gray-700 dark:text-gray-200">
+                          Número físico: {String(item.detalhes?.numeroChromebook ?? "—")}
+                        </p>
+                      )}
                       <p className="mt-1 break-words text-sm text-gray-600 dark:text-gray-300">
                         {item.tipo === "chromebook"
                           ? (item.modelo && item.modelo !== item.localizacao
@@ -533,7 +555,8 @@ export default function EquipamentosLista({
                   <tr>
                     {tipoFiltro === "chromebook" ? (
                       <>
-                        <th className={th}>Chromebook</th>
+                        <th className={th}>ID do sistema</th>
+                        <th className={th}>Nº físico</th>
                         <th className={th}>MAC</th>
                         <th className={th}>Saúde da bateria</th>
                         <th className={th}>Localização</th>
@@ -578,11 +601,7 @@ export default function EquipamentosLista({
                         <>
                           <td className={td}>
                             <p className="font-semibold text-gray-900 dark:text-gray-100">
-                              Nº{" "}
-                              {String(
-                                item.detalhes?.numeroChromebook ??
-                                  item.patrimonio.replace("CHROME-", ""),
-                              )}
+                              {(item.patrimonio || item.id).replace(/^CHROME-/i, "Chrome-")}
                             </p>
 
                             <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
@@ -591,6 +610,10 @@ export default function EquipamentosLista({
                                 : String(item.detalhes?.codigoModelo ?? "")) ||
                                 "Modelo não informado"}
                             </p>
+                          </td>
+
+                          <td className={`${td} whitespace-nowrap font-semibold text-gray-900 dark:text-gray-100`}>
+                            {String(item.detalhes?.numeroChromebook ?? "—")}
                           </td>
 
                           <td className={`${td} whitespace-nowrap font-mono text-xs`}>
@@ -613,10 +636,7 @@ export default function EquipamentosLista({
                               {item.tipo === "access-point"
                                 ? `Access Point${item.detalhes?.bloco ? ` — ${String(item.detalhes.bloco)}` : ""}`
                                 : item.tipo === "chromebook"
-                                ? `Chromebook Nº ${String(
-                                    item.detalhes?.numeroChromebook ??
-                                      item.patrimonio.replace("CHROME-", ""),
-                                  )}`
+                                ? (item.patrimonio || item.id).replace(/^CHROME-/i, "Chrome-")
                                 : mostrarNumeroNoNome(item.tipo)
                                   ? `${NOMES[item.tipo]} - ${numeroEquipamento(item)}`
                                   : NOMES[item.tipo]}
