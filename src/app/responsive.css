@@ -15,7 +15,7 @@ main th, main td { overflow-wrap: anywhere; }
 
 @media (max-width: 767px) {
   body { font-size: 14px; }
-  main.md\\:pl-60, main.pl-60 { min-height: auto; padding-left: 0 !important; }
+  main[class~="md:pl-60"], main.pl-60 { min-height: auto; padding-left: 0 !important; }
   main { width: 100%; }
   main .grid, main .flex { min-width: 0; }
   main .flex > * { min-width: 0; }
