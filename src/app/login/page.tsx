@@ -30,10 +30,6 @@ export default function LoginPage() {
       });
       const dados = await resposta.json();
 
-      if (resposta.status === 428 && dados.primeiroAcesso) {
-        router.push("/primeiro-acesso?usuario=" + encodeURIComponent(usuario.trim().toLowerCase()));
-        return;
-      }
       if (!resposta.ok) {
         setErro(dados.erro || "Não foi possível fazer login.");
         return;
@@ -82,7 +78,7 @@ export default function LoginPage() {
 
           <div className="rounded-lg border border-[#e7e7e1] bg-[#f8f8f5] px-4 py-3.5 text-sm leading-5 text-[#686961] dark:border-[#41443c] dark:bg-[#1d1f1a] dark:text-[#b9bdb2]">
             <p className="font-semibold text-[#34352f] dark:text-[#e5e6df]">Primeiro acesso?</p>
-            <p className="mt-1">Informe apenas seu usuário e clique em Entrar. Você será direcionado para criar sua senha com o código fornecido pelo administrador.</p>
+            <p className="mt-1">Se esta é sua primeira entrada, abra a ativação de conta e informe seu usuário e o código fornecido pelo administrador.</p>
           </div>
 
           <p className="text-center text-sm text-[#77786f] dark:text-[#a9aea4]">
