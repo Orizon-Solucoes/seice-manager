@@ -13,7 +13,7 @@ interface LimiteRow extends RowDataPacket {
 
 async function garantirTabela() {
   if (!inicializacao) {
-    inicializacao = pool.execute(
+    inicializacao = pool.query(
       `CREATE TABLE IF NOT EXISTS auth_rate_limits (
         chave CHAR(64) NOT NULL PRIMARY KEY,
         tentativas INT UNSIGNED NOT NULL DEFAULT 0,
