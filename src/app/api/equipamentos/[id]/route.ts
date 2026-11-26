@@ -165,8 +165,12 @@ export async function PATCH(
       return erroJson("Selecione um tipo de equipamento válido.", 400);
     }
 
-    if (!STATUS.includes(status as StatusEquipamento)) {
-      return erroJson("Selecione um status válido.", 400);
+    const statusChromebook = ["em-uso", "disponivel", "reserva", "para-descarte"];
+    if (
+      !STATUS.includes(status as StatusEquipamento) ||
+      (tipo === "chromebook" && !statusChromebook.includes(status))
+    ) {
+      return erroJson("Selecione um status válido para este equipamento.", 400);
     }
 
     const limites: [string, string | null, number][] = [
