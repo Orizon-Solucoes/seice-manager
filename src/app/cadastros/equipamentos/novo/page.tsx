@@ -342,12 +342,24 @@ export default function CadastroPage() {
                   value={status}
                   onChange={(event) => setStatus(event.target.value)}
                 >
-                  <option value="disponivel">Disponível</option>
-                  <option value="em-uso">Em uso</option>
-                  <option value="em-reparo">Em reparo</option>
-                  <option value="reserva">Reserva</option>
-                  <option value="inativo">Inativo</option>
-                  <option value="para-descarte">Para descarte</option>
+                  {(tipo === "chromebook"
+                    ? [
+                        ["em-uso", "Em uso"],
+                        ["disponivel", "Disponível"],
+                        ["reserva", "Reserva"],
+                        ["para-descarte", "Para descarte"],
+                      ]
+                    : [
+                        ["disponivel", "Disponível"],
+                        ["em-uso", "Em uso"],
+                        ["em-reparo", "Em reparo"],
+                        ["reserva", "Reserva"],
+                        ["inativo", "Inativo"],
+                        ["para-descarte", "Para descarte"],
+                      ]
+                  ).map(([valor, nome]) => (
+                    <option key={valor} value={valor}>{nome}</option>
+                  ))}
                 </select>
               </div>
             </div>
