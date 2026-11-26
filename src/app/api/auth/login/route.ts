@@ -1,8 +1,14 @@
-
 import { NextResponse } from "next/server";
 import type { RowDataPacket } from "mysql2/promise";
 import { pool } from "@/lib/db";
 import { criarSessao, normalizarPerfil, verificarSenha } from "@/lib/auth";
+import {
+  criarChaveLimite,
+  limparLimite,
+  registrarFalha,
+  respostaRateLimit,
+  verificarLimite,
+} from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,15 +25,25 @@ interface UsuarioRow extends RowDataPacket {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const entrada: unknown = await request.json();
+    if (!entrada || typeof entrada !== "object" || Array.isArray(entrada)) {
+      return NextResponse.json({ erro: "Dados inválidos." }, { status: 400 });
+    }
 
-    const usuario = String(body.usuario ?? "").trim().toLowerCase();
-    const senha = String(body.senha ?? "");
+    const body = entrada as Record<string, unknown>;
+    const usuario = typeof body.usuario === "string" ? body.usuario.trim().toLowerCase() : "";
+    const senha = typeof body.senha === "string" ? body.senha : "";
 
-    if (!usuario || !senha) {
+    if (!usuario || !senha || usuario.length > 100 || senha.length > 128) {
+      return NextResponse.json({ erro: "Usuário ou senha inválidos." }, { status: 401, headers: { "Cache-Control": "no-store" } });
+    }
+
+    const chaveLimite = criarChaveLimite(request, usuario);
+    const limite = await verificarLimite(chaveLimite);
+    if (!limite.permitido) {
       return NextResponse.json(
-        { erro: "Informe o usuário e a senha." },
-        { status: 400 },
+        { erro: "Muitas tentativas. Aguarde antes de tentar novamente." },
+        respostaRateLimit(limite.aguardarSegundos),
       );
     }
 
@@ -40,35 +56,22 @@ export async function POST(request: Request) {
     );
 
     const conta = rows[0];
+    const senhaValida = Boolean(
+      conta &&
+      Number(conta.ativo) === 1 &&
+      conta.senha_hash &&
+      verificarSenha(senha, conta.senha_hash),
+    );
 
-    if (!conta || Number(conta.ativo) !== 1) {
+    if (!senhaValida || !conta) {
+      await registrarFalha(chaveLimite);
       return NextResponse.json(
         { erro: "Usuário ou senha inválidos." },
-        { status: 401 },
+        { status: 401, headers: { "Cache-Control": "no-store" } },
       );
     }
 
-    if (!conta.senha_hash) {
-      return NextResponse.json(
-        {
-          primeiroAcesso: true,
-          mensagem:
-            "Esta conta ainda precisa ser ativada. Informe o código recebido do administrador para criar sua senha.",
-        },
-        {
-          status: 428,
-          headers: { "Cache-Control": "no-store" },
-        },
-      );
-    }
-
-    if (!verificarSenha(senha, conta.senha_hash)) {
-      return NextResponse.json(
-        { erro: "Usuário ou senha inválidos." },
-        { status: 401 },
-      );
-    }
-
+    await limparLimite(chaveLimite);
     const token = await criarSessao(conta.id);
     const perfil = normalizarPerfil(conta.perfil);
 
@@ -84,9 +87,7 @@ export async function POST(request: Request) {
           administradorGeral: perfil === "admin",
         },
       },
-      {
-        headers: { "Cache-Control": "no-store" },
-      },
+      { headers: { "Cache-Control": "no-store" } },
     );
 
     resposta.cookies.set("cm_session", token, {
@@ -96,14 +97,12 @@ export async function POST(request: Request) {
       path: "/",
       maxAge: 7 * 24 * 60 * 60,
     });
-
     return resposta;
   } catch (error) {
     console.error("Erro no login:", error);
-
     return NextResponse.json(
       { erro: "Não foi possível realizar o login." },
-      { status: 500 },
+      { status: 500, headers: { "Cache-Control": "no-store" } },
     );
   }
 }
